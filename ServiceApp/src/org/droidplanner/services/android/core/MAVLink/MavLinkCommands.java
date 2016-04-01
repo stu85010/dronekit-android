@@ -13,6 +13,7 @@ import com.o3dr.services.android.lib.model.ICommandListener;
 
 import org.droidplanner.services.android.core.drone.autopilot.MavLinkDrone;
 import org.droidplanner.services.android.core.drone.variables.ApmModes;
+import org.droidplanner.services.android.core.drone.variables.IVehicleModes;
 
 public class MavLinkCommands {
 
@@ -105,6 +106,14 @@ public class MavLinkCommands {
     }
 
     public static void changeFlightMode(MavLinkDrone drone, ApmModes mode, ICommandListener listener) {
+        msg_set_mode msg = new msg_set_mode();
+        msg.target_system = drone.getSysid();
+        msg.base_mode = 1; // TODO use meaningful constant
+        msg.custom_mode = mode.getNumber();
+        drone.getMavClient().sendMessage(msg, listener);
+    }
+
+    public static void changeFlightMode(MavLinkDrone drone, IVehicleModes mode, ICommandListener listener) {
         msg_set_mode msg = new msg_set_mode();
         msg.target_system = drone.getSysid();
         msg.base_mode = 1; // TODO use meaningful constant
